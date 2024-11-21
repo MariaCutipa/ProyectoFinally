@@ -15,7 +15,7 @@ app.listen(port, () => {
     console.log('Servidor backend en funcionamiento en el puerto: '+ port);
 });
 
-mongoose.connect('mongodb://0.0.0.0/mean_db', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://mongo:27017/mean_db', { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => console.log('MongoDB Connected...'))
 .catch(err => console.log(err));
 

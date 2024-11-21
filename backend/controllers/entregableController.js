@@ -5,16 +5,11 @@ require('dotenv').config();
 
 // Configurar Redis
 const redisClient = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
 });
 
-// Manejo de errores
-redisClient.on('error', (err) => {
-    console.error('Error conectando a Redis:', err);
-});
+redisClient.connect();
 
-const pushToQueue = promisify(redisClient.rpush).bind(redisClient);
 // Crear un entregable
 exports.createEntregable = async (req, res) => {
     try {
@@ -29,12 +24,14 @@ exports.createEntregable = async (req, res) => {
             correoEstudiante,
             proyectoId,
             nombreEntregable,
-            archivoPath:  `/uploads/${req.file.filename}`, // Ruta del archivo temporal
+            archivoPath: `/uploads/${req.file.filename}`, // Ruta del archivo temporal
             archivoNombre: req.file.filename,
         };
 
-        await nuevoEntregable.save();
-        res.status(201).json(nuevoEntregable);
+        // Usando la nueva API de Redis sin necesidad de promisify
+        await redisClient.rPush('entregablesQueue', JSON.stringify(taskData));
+        res.status(201).json({ message: 'Entregable procesado correctamente' });
+
     } catch (error) {
         res.status(500).json({ error: 'Error al crear el entregable', details: error.message });
     }

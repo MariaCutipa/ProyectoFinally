@@ -15,9 +15,10 @@ app.listen(port, () => {
     console.log('Servidor backend en funcionamiento en el puerto: '+ port);
 });
 
-mongoose.connect('mongodb://mongo:27017/mean_db', { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => console.log('MongoDB Connected...'))
-.catch(err => console.log(err));
+// Conexión a la base de datos MongoDB
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error de conexión a MongoDB:', err));
 
 const entregableRoutes = require('./routes/entregable');
 

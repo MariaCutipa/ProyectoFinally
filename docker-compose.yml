@@ -1,0 +1,23 @@
+services:
+
+  backend:
+    build: ./ProyectoFinally/backend
+    container_name: node-api
+    networks:
+      - mi_red
+    ports:
+      - "4000:4000"
+    environment:
+      - REDIS_HOST=34.229.90.61
+      - REDIS_PORT=6379
+
+  frontend:
+    build: ./Angular
+    container_name: angular-app
+    networks:
+      - mi_red
+    ports:
+      - "4200:80"
+
+networks:
+  mi_red:

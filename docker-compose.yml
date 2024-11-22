@@ -10,6 +10,7 @@ services:
     environment:
       - REDIS_HOST=34.229.90.61
       - REDIS_PORT=6379
+      - MONGODB_URI=mongodb://root:admin@34.227.7.159/tecsup?authSource=admin
 
   frontend:
     build: ./Angular
